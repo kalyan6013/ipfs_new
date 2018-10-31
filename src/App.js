@@ -17,9 +17,12 @@ class App extends Component {
       gasUsed:'',
       txReceipt: '',
       responseDoc:'',
-      listItem:'',
+      listItem:[],
+      listItems:[],
       i:'',
-      liItem:[]
+      j:'',
+      liItem:[],
+      liItems:[]
     };
 
 
@@ -64,6 +67,7 @@ class App extends Component {
         // results returns XML. lets cast this to a string, then create
         // a new DOM object out of it!
         var values=[];
+        var value=[];
         results
           .text()
           .then(( str ) => {
@@ -71,15 +75,20 @@ class App extends Component {
             console.log(this.state.responseDoc);
 
             this.state.listItem  = this.state.responseDoc.getElementsByTagName('Name');
-            // console.log(listItem);
+            this.state.listItems  = this.state.responseDoc.getElementsByTagName('Author');
+            //console.log(this.state.listItem);
             for (this.i=0; this.i<this.state.listItem.length; this.i++){
-            values.push(this.state.responseDoc.getElementsByTagName('Name')[this.i].textContent);
-            
+              values.push(this.state.responseDoc.getElementsByTagName('Name')[this.i].textContent);
             console.log(values);
+            }
+            for (this.j=0; this.j<this.state.listItems.length; this.j++){
+              value.push(this.state.responseDoc.getElementsByTagName('Author')[this.j].textContent);
+            //console.log(value);
             // return responseDoc.getElementsByTagName('Name')[i].textContent;
              }
 
              this.setState({liItem: values});
+             this.setState({liItems: value});
           })
         });
   } //onClick})})
@@ -147,7 +156,16 @@ class App extends Component {
           <br />
 
           <div>
-            <p><b>Name of the Book: </b>{this.state.liItem.map(x => {return x + '\n';})}</p>
+            <table>
+              <tr>
+            <td><b>Name of the Book: </b></td>
+            <td>{this.state.liItem.map(x => {return x + '\n';})}</td>
+            </tr>
+            <tr>
+            <td><b>Author Name: </b></td>
+            <td>{this.state.liItems.map(y => {return y + '\n';})}</td>
+            {/* this one */}</tr>
+            </table>
             </div>
 
             <img src= {`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt="" style={{height:200}}></img>
